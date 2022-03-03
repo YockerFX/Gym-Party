@@ -22,6 +22,8 @@
 
 > Legs
 
+🕐 End Screen
+
 #### Gameboards
 
 🕐 Corps 
@@ -32,8 +34,6 @@
 
 🕐 Allround
 
-
-🕐 End Screen
 
 ## The Game
 
