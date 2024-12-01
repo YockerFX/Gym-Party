@@ -1,0 +1,54 @@
+.dice-roll {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .dice {
+    margin: auto;
+    font-size: 48px;
+    font-weight: bold;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  }
+  
+  .dice:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .dice:active {
+    transform: scale(0.9);
+  }
+  
+  .dice.rolling {
+    animation: shake 0.5s infinite;
+    pointer-events: none; /* Verhindert Klicks */
+    opacity: 0.7; /* Zeigt an, dass der Würfel deaktiviert ist */
+  }
+  
+  
+  @keyframes shake {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(10deg);
+    }
+    50% {
+      transform: rotate(-10deg);
+    }
+    75% {
+      transform: rotate(10deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+  
