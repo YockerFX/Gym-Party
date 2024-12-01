@@ -3,6 +3,8 @@ import './App.css';
 import GameBoard from './components/GameBoard';
 import PlayerControls from './components/PlayerControls';
 import DiceRoll from './components/DiceRoll';
+import eventIcons from './config/config';
+import trophyImage from './assets/trophy.png'; // Importiere das Bild
 
 const App = () => {
   const [activePlayer, setActivePlayer] = useState(null);
@@ -10,8 +12,16 @@ const App = () => {
   const [board, setBoard] = useState([]);
 
   useEffect(() => {
-    // Initialisiere das Spielfeld mit der vorgegebenen Reihenfolge
     const initializeBoard = () => {
+      const events = [
+        { type: 'pushup', count: 10 },
+        { type: 'jumpingJack', count: 15 },
+        { type: 'situp', count: 20 },
+        { type: 'burpee', count: 5 },
+        { type: 'plank', count: 30 },
+        { type: 'wall', count: 60 },
+      ];
+
       const boardLayout = [
         0, 1, 2, 3, 4, 5, 6,
         23, 24, 25, 26, 27, 28, 7,
@@ -22,20 +32,18 @@ const App = () => {
         18, 17, 16, 15, 14, 13, 12,
       ];
 
-      const events = [
-        "10 Push-ups",
-        "15 Jumping Jacks",
-        "20 Squats",
-        "5 Burpees",
-        "Rest Day",
-      ];
+      return boardLayout.map((id, index) => {
+        if (id === 48) {
+          return { id, isGoal: true, event: null, image: trophyImage, icon: trophyImage }; // Füge das Bild für das Zielfeld hinzu
+        }
 
-      // Fülle das Spielfeld mit Ereignissen
-      return boardLayout.map((id, index) => ({
-        id,
-        isGoal: id === 48, // Feld 48 ist das Ziel
-        event: id === 48 ? "Goal" : events[index % events.length],
-      }));
+        const event = events[index % events.length];
+        return {
+          id,
+          isGoal: false,
+          event: { type: event.type, count: event.count, icon: eventIcons[event.type] },
+        };
+      });
     };
 
     setBoard(initializeBoard());
@@ -46,9 +54,9 @@ const App = () => {
       const startPosition = prevPositions[player];
       const maxPosition = 48; // Ziel
       const overshoot = startPosition + steps - maxPosition;
-  
+
       let path = [];
-  
+
       if (steps > 0) {
         if (overshoot > 0) {
           // Spieler muss rückwärts gehen
@@ -78,37 +86,36 @@ const App = () => {
           }
         }
       }
-  
+
       console.log(`Start Position: ${startPosition}, Steps: ${steps}`);
       console.log("Calculated Path for Player:", path);
-  
+
       // Wenn kein Pfad berechnet wurde, bleibt der Spieler stehen
       if (path.length === 0) {
         console.warn(`Player ${player} did not move.`);
         return prevPositions;
       }
-  
+
       animatePlayerMovement(player, path);
-  
+
       return prevPositions; // Ursprüngliche Position zurückgeben; Änderungen erfolgen durch Animation
     });
   };
-  
-  
+
   const animatePlayerMovement = (player, path) => {
     let index = 0;
-  
+
     const interval = setInterval(() => {
       if (index >= path.length) {
         clearInterval(interval);
-  
+
         // Prüfen, ob der Spieler perfekt im Ziel ist
         if (path[path.length - 1] === 48) {
           alert(`Player ${player} has reached the goal perfectly!`);
         }
         return;
       }
-  
+
       // Aktuelle Position sicherstellen
       const nextPosition = path[index];
       if (nextPosition === undefined || nextPosition < 0 || nextPosition > 48) {
@@ -116,7 +123,7 @@ const App = () => {
         clearInterval(interval);
         return;
       }
-  
+
       // Setze die aktuelle Position des Spielers
       setPositions(prevPositions => ({
         ...prevPositions,
@@ -129,7 +136,7 @@ const App = () => {
 
   return (
     <div className="app">
-      <GameBoard board={board} positions={positions} />
+      <GameBoard board={board} positions={positions} trophyImage={trophyImage} />
       <PlayerControls activePlayer={activePlayer} setActivePlayer={setActivePlayer} />
       <DiceRoll activePlayer={activePlayer} movePlayer={movePlayer} />
     </div>

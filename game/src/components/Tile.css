@@ -1,53 +1,59 @@
 .tile {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #ccc;
-    padding: 10px;
-    position: relative;
-    transition: background-color 0.3s ease-in-out;
-  }
-  
-  .tile.goal {
-    background-color: gold;
-    font-weight: bold;
-  }
-  
-  .players {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    display: flex;
-    gap: 5px;
-  }
-  
-  .player {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    text-align: center;
-    font-size: 10px;
-    font-weight: bold;
-    color: #fff;
-    background-color: red; /* Farben können je Spieler angepasst werden */
-    transition: transform 0.25s ease-in-out, top 0.25s ease-in-out, left 0.25s ease-in-out;
-  }
-  
-  .player-1 {
-    background-color: red;
-  }
-  .player-2 {
-    background-color: blue;
-  }
-  .player-3 {
-    background-color: green;
-  }
-  .player-4 {
-    background-color: purple;
-  }
-  
-  .player.moving {
-    transform: scale(1.5); /* Vergrößert den Spieler kurz */
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  padding: 10px;
+  position: relative;
+}
+
+.tile.goal {
+  background-color: gold;
+  font-weight: bold;
+}
+
+.event {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.event-icon {
+  width: 30px;
+  height: 30px;
+  margin-bottom: 5px;
+}
+
+.players {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  display: flex;
+  gap: 5px;
+}
+
+.player {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.player-1 {
+  background-color: red;
+}
+.player-2 {
+  background-color: blue;
+}
+.player-3 {
+  background-color: green;
+}
+.player-4 {
+  background-color: purple;
+}
