@@ -1,51 +1,62 @@
 .player-controls {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Ermöglicht, dass nur die Buttons klickbar sind */
-  }
-  
-  .player-btn {
-    position: absolute;
-    pointer-events: auto; /* Ermöglicht Klicks auf die Buttons */
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .player-btn.active {
-    background-color: #28a745;
-  }
-  
-  .player-btn:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Position der Buttons */
-  .player-1 {
-    top: 10px;
-    left: 10px;
-  }
-  
-  .player-2 {
-    top: 10px;
-    right: 10px;
-  }
-  
-  .player-3 {
-    bottom: 10px;
-    left: 10px;
-  }
-  
-  .player-4 {
-    bottom: 10px;
-    right: 10px;
-  }
-  
+  position: fixed; /* Vollbildübergreifend */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Verhindert Interferenzen mit Klicks auf Spielfeld */
+  z-index: 1000; /* Immer im Vordergrund */
+}
+
+.player-btn {
+  position: fixed; /* Buttons unabhängig vom Container platzieren */
+  width: 100px;
+  height: 100px;
+  background-color: #3498db;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  border: none;
+  transition: background-color 0.3s, transform 0.2s;
+  pointer-events: auto; /* Klicks auf Buttons erlauben */
+}
+
+/* Button-Hover und aktive Zustände */
+.player-btn:hover {
+  background-color: #2980b9;
+}
+
+.player-btn.active {
+  background-color: #2ecc71;
+  transform: scale(1.1);
+}
+
+/* Positionen für die Buttons */
+.player-btn-1 {
+  top: 0;
+  left: 0;
+  border-radius: 0 0 100% 0; 
+}
+
+.player-btn-2 {
+  top: 0;
+  right: 0;
+  border-radius:  0 0 0 100%; 
+}
+
+.player-btn-3 {
+  bottom: 0;
+  left: 0;
+  border-radius: 0 100% 0 0 ; /* Unten links */
+}
+
+.player-btn-4 {
+  bottom: 0;
+  right: 0;
+  border-radius: 100% 0 0 0; /* Unten rechts */
+}
