@@ -1,22 +1,132 @@
+/* Hauptcontainer für das Spielfeld */
+/* Hauptcontainer für die App */
 .app {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  padding: 0;
+  background-color: #f4f4f4;
+  overflow: hidden;
+}
+
+/* Spielerbuttons */
+.player-controls {
+  position: relative;
+  height: 100%;
+  width: 30%; /* Bereich für Buttons und Würfel */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Buttons */
+.player-btn {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: #ffcc00;
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, background-color 0.3s;
+}
+
+.player-btn:hover {
+  background-color: #ffa500;
+}
+
+.player-btn.active {
+  transform: scale(1.1);
+}
+
+/* Würfel */
+.dice-roll {
+  position: absolute;
+  right: 20px; /* Abstand vom rechten Rand */
+  top: 50%; /* Mittig zwischen den Buttons von Spieler 2 und Spieler 4 */
+  transform: translateY(-50%);
+}
+
+.dice {
+  width: 80px;
+  height: 80px;
+  font-size: 30px;
+  font-weight: bold;
+  background-color: white;
+  border: 3px solid #333;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.dice:hover {
+  background-color: #f0f0f0;
+}
+
+.dice:active {
+  transform: scale(0.9);
+}
+
+/* Popup-Container */
+.event-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto; /* Passt sich der Breite an */
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 2px solid #3498db;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: flex; /* Nebeneinander ausrichten */
+  flex-direction: row; /* Horizontal */
+  align-items: center;
+  padding: 15px;
+  gap: 20px; /* Abstand zwischen den Events */
+  z-index: 1000;
+}
+
+/* Einzelne Events */
+.popup-event {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background: #fefefe; /* Clean white background */
-  color: #1c1c1e; /* Darker Gray for contrast */
-  padding: 20px;
-  font-family: 'San Francisco', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  box-sizing: border-box;
+  text-align: center;
 }
 
-button {
-  font-family: inherit;
-  cursor: pointer;
+/* Event-Icon */
+.popup-icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px;
 }
 
-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.5);
+/* Anzahl */
+.popup-count {
+  font-size: 20px;
+  font-weight: bold;
+  color: #2c3e50;
 }
+
+/* Übungsname */
+.popup-label {
+  font-size: 16px;
+  font-weight: normal;
+  color: #34495e;
+}
+
+
+

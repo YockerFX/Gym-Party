@@ -4,12 +4,43 @@ import GameBoard from './components/GameBoard';
 import PlayerControls from './components/PlayerControls';
 import DiceRoll from './components/DiceRoll';
 import eventIcons from './config/config';
-import trophyImage from './assets/trophy.png'; // Importiere das Bild
+import trophyImage from './assets/trophy.png';
 
 const App = () => {
   const [activePlayer, setActivePlayer] = useState(null);
   const [positions, setPositions] = useState({ 1: 0, 2: 0, 3: 0, 4: 0 });
   const [board, setBoard] = useState([]);
+  const [currentEvent, setCurrentEvent] = useState(null); // Zustand für Event-Popup
+
+  const laddersAndSlides = {
+    8: 29,  // Leiter 1
+    17: 36, // Leiter 2
+    32: 13, // Rutsche 1
+    39: 24, // Rutsche 2
+    46: 35, // Rutsche 3
+  };
+
+  const exerciseLabels = {
+    pushup: 'Push Up',
+    jumpingJack: 'Jumping Jacks',
+    situp: 'Sit Ups',
+    burpee: 'Burpee',
+    plank: 'Plank',
+    wall: 'Wall Sitting',
+  };
+
+  const processCurrentEvent = (events) => {
+    // Entferne Duplikate basierend auf dem Typ der Aufgabe
+    const uniqueEvents = events.reduce((acc, event) => {
+      if (!acc.some(e => e.type === event.type)) {
+        acc.push(event);
+      }
+      return acc;
+    }, []);
+
+    // Begrenze auf maximal zwei Aufgaben
+    return uniqueEvents.slice(0, 2);
+  };
 
   useEffect(() => {
     const initializeBoard = () => {
@@ -33,13 +64,17 @@ const App = () => {
       ];
 
       return boardLayout.map((id, index) => {
+        if (id === 0) {
+          return { id, isStart: true, event: null };
+        }
         if (id === 48) {
-          return { id, isGoal: true, event: null, image: trophyImage, icon: trophyImage }; // Füge das Bild für das Zielfeld hinzu
+          return { id, isGoal: true, event: null, image: trophyImage, icon: trophyImage };
         }
 
         const event = events[index % events.length];
         return {
           id,
+          isStart: false,
           isGoal: false,
           event: { type: event.type, count: event.count, icon: eventIcons[event.type] },
         };
@@ -50,55 +85,41 @@ const App = () => {
   }, []);
 
   const movePlayer = (player, steps) => {
-    setPositions(prevPositions => {
+    setPositions((prevPositions) => {
       const startPosition = prevPositions[player];
-      const maxPosition = 48; // Ziel
+      const maxPosition = 48;
       const overshoot = startPosition + steps - maxPosition;
 
       let path = [];
 
       if (steps > 0) {
         if (overshoot > 0) {
-          // Spieler muss rückwärts gehen
           for (let i = 1; i <= steps; i++) {
             const nextPosition = startPosition + i;
             if (nextPosition <= maxPosition) {
               path.push(nextPosition);
             } else {
-              // Rückwärtsbewegung
               const backwardPosition = maxPosition - (nextPosition - maxPosition);
               if (backwardPosition >= 0 && backwardPosition <= maxPosition) {
                 path.push(backwardPosition);
-              } else {
-                console.error(`Backward position out of bounds: ${backwardPosition}`);
               }
             }
           }
         } else {
-          // Normale Bewegung
           for (let i = 1; i <= steps; i++) {
             const forwardPosition = startPosition + i;
             if (forwardPosition >= 0 && forwardPosition <= maxPosition) {
               path.push(forwardPosition);
-            } else {
-              console.error(`Forward position out of bounds: ${forwardPosition}`);
             }
           }
         }
       }
 
-      console.log(`Start Position: ${startPosition}, Steps: ${steps}`);
-      console.log("Calculated Path for Player:", path);
-
-      // Wenn kein Pfad berechnet wurde, bleibt der Spieler stehen
-      if (path.length === 0) {
-        console.warn(`Player ${player} did not move.`);
-        return prevPositions;
-      }
+      console.log(`Calculated path for Player ${player}:`, path);
 
       animatePlayerMovement(player, path);
 
-      return prevPositions; // Ursprüngliche Position zurückgeben; Änderungen erfolgen durch Animation
+      return prevPositions;
     });
   };
 
@@ -109,34 +130,72 @@ const App = () => {
       if (index >= path.length) {
         clearInterval(interval);
 
-        // Prüfen, ob der Spieler perfekt im Ziel ist
-        if (path[path.length - 1] === 48) {
-          alert(`Player ${player} has reached the goal perfectly!`);
+        const currentPosition = path[path.length - 1];
+
+        // Prüfe auf Leiter oder Rutsche
+        if (laddersAndSlides[currentPosition]) {
+          const targetPosition = laddersAndSlides[currentPosition];
+          console.log(
+            `Player ${player} hits a ${
+              currentPosition < targetPosition ? 'ladder' : 'slide'
+            }! Moving to ${targetPosition}`
+          );
+
+          const startTile = board.find((t) => t.id === currentPosition);
+          const targetTile = board.find((t) => t.id === targetPosition);
+
+          if (startTile?.event && targetTile?.event) {
+            setCurrentEvent((prev) =>
+              processCurrentEvent([
+                ...(prev || []),
+                startTile.event,
+                targetTile.event,
+              ])
+            );
+            setTimeout(() => setCurrentEvent(null), 3000);
+          }
+
+          animatePlayerMovement(player, [targetPosition]);
+          return;
+        }
+
+        const tile = board.find((t) => t.id === currentPosition);
+        if (tile?.event) {
+          setCurrentEvent((prev) =>
+            processCurrentEvent([...(prev || []), tile.event])
+          );
+          setTimeout(() => setCurrentEvent(null), 3000);
+        }
+
+        if (currentPosition === 48) {
+          alert(`Player ${player} has reached the goal!`);
         }
         return;
       }
 
-      // Aktuelle Position sicherstellen
       const nextPosition = path[index];
-      if (nextPosition === undefined || nextPosition < 0 || nextPosition > 48) {
-        console.error(`Invalid position detected: ${nextPosition}. Stopping animation.`);
-        clearInterval(interval);
-        return;
-      }
-
-      // Setze die aktuelle Position des Spielers
-      setPositions(prevPositions => ({
+      setPositions((prevPositions) => ({
         ...prevPositions,
         [player]: nextPosition,
       }));
-      console.log("Current Positions:", { ...positions, [player]: nextPosition });
       index++;
-    }, 250); // Bewegung alle 0.25 Sekunden
+    }, 250);
   };
 
   return (
     <div className="app">
-      <GameBoard board={board} positions={positions} trophyImage={trophyImage} />
+      {currentEvent && (
+        <div className="event-popup">
+          {currentEvent.map((event, index) => (
+            <div key={index} className="popup-event">
+              <img src={event.icon} alt={event.type} className="popup-icon" />
+              <span className="popup-count">{event.count}</span>
+              <span className="popup-label">{exerciseLabels[event.type]}</span>
+            </div>
+          ))}
+        </div>
+      )}
+      <GameBoard board={board} positions={positions} laddersAndSlides={laddersAndSlides} />
       <PlayerControls activePlayer={activePlayer} setActivePlayer={setActivePlayer} />
       <DiceRoll activePlayer={activePlayer} movePlayer={movePlayer} />
     </div>

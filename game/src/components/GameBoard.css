@@ -1,33 +1,13 @@
-/* Das gesamte Spielfeld */
+/* Das Spielfeld */
 .game-board {
   display: grid;
-  grid-template-columns: repeat(7, 1fr); /* 7x7 Board */
-  width: 90%;
-  max-width: 600px; /* Maximale Breite */
-  padding: 10px; /* Platz um die Felder */
+  grid-template-columns: repeat(7, 55px); /* 7 Spalten mit je 60px Breite */
+  grid-template-rows: repeat(7, 55px); /* 7 Reihen mit je 60px Höhe */
+  gap: 2px; /* Abstand zwischen den Feldern */
+  width: fit-content; /* Passt sich der Gesamtgröße an */
+  height: fit-content; /* Passt sich der Gesamtgröße an */
+  margin: 20px auto; /* Zentriert das Spielfeld und fügt Platz oben hinzu */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Dezenter Schatten */
+  background-color: #ffffff; /* Hintergrund für das Spielfeld */
+  padding: 5px; /* Innenabstand zum besseren Ausgleich */
 }
-
-/* Jedes Feld */
-.tile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #fdfdfd;
-  position: relative;
-  height: 65px; /* Höhe der Felder */
-  width: 65px; /* Automatische Breite */
-  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1); /* Innerer Schatten */
-}
-
-/* Farben für besondere Felder */
-.tile:nth-child(2n) {
-  background-color: #f5f5f5;
-}
-
-.tile.goal {
-  background-color: gold; /* Ziel-Feld */
-  font-weight: bold;
-  color: black;
-}
-

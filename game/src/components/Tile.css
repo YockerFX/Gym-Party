@@ -1,59 +1,131 @@
+/* Spielfeld-Kacheln */
 .tile {
+  position: relative;
+  width: 55px;
+  height: 55px;
+  background-color: #ffffff; /* Helles Weiß für den Standardhintergrund */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Dezenter Schatten */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid #ccc;
-  padding: 10px;
-  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s; /* Animation für Interaktivität */
 }
 
+.tile:hover {
+  transform: scale(1.05); /* Vergrößert das Tile leicht bei Hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Tieferer Schatten bei Hover */
+}
+
+/* Farben für abwechselnde Kacheln */
+.tile:nth-child(2n) {
+  background-color: #f8f9fa; /* Dezentes Grau für abwechselnde Felder */
+}
+
+/* Startfeld */
+.tile.start {
+  background-color: #d6eaf8; /* Sanftes Blau für das Startfeld */
+  border: 2px solid #5dade2;
+  box-sizing: border-box; /* Border zählt zur Innenfläche */
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.1); /* Innerer Schatten für Tiefe */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s; /* Interaktive Effekte */
+}
+
+
+.start-icon {
+  width: 35px; /* Leicht größere Icons */
+  height: 35px;
+}
+
+/* Zielfeld */
 .tile.goal {
-  background-color: gold;
-  font-weight: bold;
+  background-color: #fdebd0; /* Sanftes Gold für das Zielfeld */
+  border: 2px solid #f8c471;
+  box-sizing: border-box; /* Border zählt zur Innenfläche */
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.1); /* Innerer Schatten für Tiefe */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s; /* Interaktive Effekte */
 }
 
+.finish-icon {
+  width: 35px; /* Leicht größere Icons */
+  height: 35px;
+}
+
+/* Events (Icons und Text) */
 .event {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
 }
 
 .event-icon {
-  width: 30px;
-  height: 30px;
-  margin-bottom: 5px;
+  width: 28px; /* Kleinere Icons für Events */
+  height: 28px;
+  margin-bottom: 3px; /* Weniger Abstand zum Text */
 }
 
-.players {
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-  display: flex;
-  gap: 5px;
+.event span {
+  font-size: 12px;
+  color: #7f8c8d; /* Dezente Textfarbe */
 }
 
+/* Spieler */
 .player {
-  width: 20px;
-  height: 20px;
+  position: absolute;
+  width: 18px; /* Spielergröße angepasst */
+  height: 18px;
   border-radius: 50%;
-  text-align: center;
-  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
   font-weight: bold;
-  color: #fff;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Spieler mit Schatten */
+}
+
+/* Rutschen-Text */
+.unlucky-text {
+  font-size: 12px;
+  font-weight: bold;
+  color: #c0392b; /* Rot für Rutschen */
+  margin-top: 5px;
+  text-align: center;
+}
+
+/* Leiter */
+.ladder {
+  font-size: 20px;
+  color: #27ae60; /* Grün für Leitern */
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+/* Rutsche */
+.slide {
+  font-size: 20px;
+  color: #c0392b; /* Rot für Rutschen */
+  position: absolute;
+  top: 5px;
+  left: 5px;
 }
 
 .player-1 {
-  background-color: red;
+  background-color: #e74c3c; /* Sanfteres Rot */
 }
 .player-2 {
-  background-color: blue;
+  background-color: #3498db; /* Sanfteres Blau */
 }
 .player-3 {
-  background-color: green;
+  background-color: #2ecc71; /* Sanfteres Grün */
 }
 .player-4 {
-  background-color: purple;
+  background-color: #9b59b6; /* Sanfteres Lila */
 }
